@@ -1,0 +1,11 @@
+essentia~=2.1b5
+numpy~=1.16.2
+pandas~=0.25.1
+pyrubberband~=0.3.0
+matplotlib~=3.0.2
+setuptools~=41.6.0
+joblib~=0.14.1
+scipy~=1.1.0
+librosa~=0.7.2
+madmom~=0.16.1
+pydub~=0.23.0
