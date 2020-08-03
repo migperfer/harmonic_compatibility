@@ -1,6 +1,4 @@
 from .utilities import self_tempo_estimation
-from librosa import core
-from librosa import feature
 import matplotlib.pyplot as plt
 from madmom.features.downbeats import DBNDownBeatTrackingProcessor as downbeattrack
 from madmom.features.downbeats import RNNDownBeatProcessor as beatrnn
@@ -55,14 +53,15 @@ def get_beat_sync_chroma_and_spectrum(audio, sr=None, bpm=None):
     band2list = []
     band3list = []
     chromas = []
+    fft_cal = std.FFT()
     for i in range(1, len(framed_dbn)):
         fft_eq = abs(np.fft.fft(eql_y[int(framed_dbn[i - 1] * sr):int(framed_dbn[i] * sr)]))
         freqs = np.fft.fftfreq(len(fft_eq), 1 / sr)
         band1list.append(np.sqrt(np.mean(sum(fft_eq[np.where(np.logical_and(freqs > band1[0], freqs < band1[1]))]**2))))
         band2list.append(np.sqrt(np.mean(sum(fft_eq[np.where(np.logical_and(freqs > band2[0], freqs < band2[1]))]**2))))
         band3list.append(np.sqrt(np.mean(sum(fft_eq[np.where(np.logical_and(freqs > band3[0], freqs < band3[1]))]**2))))
-        stft = abs(core.stft(y[int(framed_dbn[i - 1] * sr):int(framed_dbn[i] * sr)]))
-        chroma = np.mean(feature.chroma_stft(y=None, S=stft ** 2), axis=1)
+        stft = abs(std.FFT(y[int(framed_dbn[i - 1] * sr):int(framed_dbn[i] * sr)]))
+        chroma = np.mean(feature.chroma_stft(y=None, S=stft ** 2), axis=1) #TODO: This here
         chromas.append(chroma)
     chromas = np.array(chromas).transpose()
     band1list = np.array(band1list).transpose()
@@ -77,8 +76,9 @@ def get_beat_sync_spectrums(audio):
     :param audio: Path to the song
     :return: Array containing energy in band1, band2, band3
     """
-    y, sr = core.load(audio, sr=44100)
-    eql_y = EqualLoudness()(y)
+    y = std.MonoLoader(filename=audio)
+    sr=44100
+    eql_y = std.EqualLoudness()(y)
     tempo, framed_dbn = self_tempo_estimation(y, sr)
     np.append(framed_dbn, np.array(len(y)/sr))
     band1 = (0, 220)
