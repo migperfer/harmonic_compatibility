@@ -4,6 +4,11 @@ epsilon = np.finfo(float).eps
 
 __all__ = ['TIV', 'TIVCollection']
 
+
+"""
+You can also find this TIV implementation in https://github.com/aframires/TIVlib/tree/semitones_rotation
+"""
+
 class TIV:
 
     weights = [3, 8, 11.5, 15, 14.5, 7.5]
