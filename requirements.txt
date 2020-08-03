@@ -1,3 +1,4 @@
+numba~=0.45.0
 essentia~=2.1b5
 numpy~=1.16.2
 pandas~=0.25.1
