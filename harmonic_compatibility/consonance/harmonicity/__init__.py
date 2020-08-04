@@ -1,1 +1,1 @@
-from .peter_harmonicity import harmonicity as p_harmon
+from .peter_harmonicity.harmonicity import milne_pc_spectrum, harmonicity, transform_to_pc

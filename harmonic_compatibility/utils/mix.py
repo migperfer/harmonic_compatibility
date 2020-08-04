@@ -9,7 +9,7 @@ eps = np.finfo(float).eps
 
 __all__ = ['mix', 'create_mashabilities_examples', 'create_tiv_examples',
            'create_roman_dissonance_examples', 'get_sines_per_frame',
-           'transform_to_pc', 'create_p_harmonicity_examples',
+           , 'create_p_harmonicity_examples',
            'create_inharmonicity_examples', 'create_dissonances_examples',
            'create_hutchinson_examples']
 
@@ -323,12 +323,3 @@ def get_hpeaks_per_frame(audio, sr=44100, onlyfrecuencies=False, nsines=20):
         return sines[:, 0, :]
     else:
         return sines[:, 0, :], sines[:, 1, :]
-
-
-def transform_to_pc(freqs):
-    """
-    Converts between frequency to pitch class (continuous)
-    :param freqs: The frequencies to convert
-    :return: Pitch class for each frequency
-    """
-    return (9 + 12*np.log2(eps + (freqs/440))) % 12

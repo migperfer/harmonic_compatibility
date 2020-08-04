@@ -118,3 +118,12 @@ def harmonicity(X):
     all_pob = all_pob[:-1]
     q_normalized = all_pob / (np.sum(all_pob))
     return np.sum(q_normalized * np.log2(eps + (q_normalized * len(all_pob))))
+
+
+def transform_to_pc(freqs):
+    """
+    Converts between frequency to pitch class (continuous)
+    :param freqs: The frequencies to convert
+    :return: Pitch class for each frequency
+    """
+    return (9 + 12*np.log2(eps + (freqs/440))) % 12
