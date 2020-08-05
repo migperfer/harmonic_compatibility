@@ -1,1 +1,1 @@
-from .roman_diss import mix_dissonance
+from .roman_diss import roman_dissonance
