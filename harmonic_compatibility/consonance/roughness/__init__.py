@@ -1,1 +1,2 @@
 from .gebhardt_diss import gebhardt_dissonance
+from .hutchinson_diss import hutchinson_dissonance

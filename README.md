@@ -90,9 +90,11 @@ Notice that with this H&P algorithm calculates the harmonicity, but doesn't calc
 ### Gebhardt et al, Hutchinson & Knopoff dissonance
 ```python
 from harmonic_compatibility.consonance.roughness import gebhardt_dissonance
+from harmonic_compatibility.consonance.roughness import hutchinson_dissonance
 
 audio_vector1, audio_vector2 = librosa/essentia/madmom...  # Load the two tracks, and get their vector of samples
-ov, fwise= gebhardt_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
+ov_g, fwise_g = gebhardt_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
+ov_h, fwise_h = hutchinson_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
 ```
 
 In this case this algorithm calculates the roughness across different pitch shifts as in the original paper:
