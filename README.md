@@ -87,12 +87,12 @@ harmonicity = ph_harmon(milne_spec)
 ```
 Notice that with this H&P algorithm calculates the harmonicity, but doesn't calculate the pitch shift that maximises the harmonicity. To do so you have to pitch shift the audio using an algorithm of your preference and use the three steps shown above. 
 
-### Roman et al, Hutchinson & Knopoff dissonance
+### Gebhardt et al, Hutchinson & Knopoff dissonance
 ```python
-from harmonic_compatibility.consonance.roughness import roman_dissonance
+from harmonic_compatibility.consonance.roughness import gebhardt_dissonance
 
 audio_vector1, audio_vector2 = librosa/essentia/madmom...  # Load the two tracks, and get their vector of samples
-ov, fwise= roman_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
+ov, fwise= gebhardt_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
 ```
 
 In this case this algorithm calculates the roughness across different pitch shifts as in the original paper:

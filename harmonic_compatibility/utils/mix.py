@@ -8,7 +8,7 @@ from pyrubberband.pyrb import pitch_shift, frequency_multiply
 eps = np.finfo(float).eps
 
 __all__ = ['mix', 'create_mashabilities_examples', 'create_tiv_examples',
-            'create_roman_dissonance_examples', 'create_p_harmonicity_examples', 
+            'create_gebhardt_dissonance_examples', 'create_p_harmonicity_examples', 
             'create_inharmonicity_examples', 'create_dissonances_examples', 
             'create_hutchinson_examples']
 
@@ -124,7 +124,7 @@ def create_tiv_examples(audio_target_file, file_compatibilities, audios_folder, 
     return listoreturn
 
 
-def create_roman_dissonance_examples(audio_target_file, file_compatibilities, audios_folder, n_examples=3, sr=44100):
+def create_gebhardt_dissonance_examples(audio_target_file, file_compatibilities, audios_folder, n_examples=3, sr=44100):
     """
     Given an audio and a file with its compatibilities create the mixes
     :param audio_target_file: The audio itself

@@ -5,7 +5,7 @@ from itertools import combinations
 import essentia.standard as estd
 
 
-def roman_dissonance(audio_vector1, audio_vector2):
+def gebhardt_dissonance(audio_vector1, audio_vector2):
     """
     Dissonance created by the mix of two audios. Sampling rate should be 44100
     :param audio_vector1: Numpy array of audio 1

@@ -1,1 +1,1 @@
-from .roman_diss import roman_dissonance
+from .gebhardt_diss import gebhardt_dissonance

@@ -1,4 +1,4 @@
-from harmonic_compatibility.consonance.roughness import roman_dissonance
+from harmonic_compatibility.consonance.roughness import gebhardt_dissonance
 from glob import glob
 import essentia.standard as std
 import numpy as np
@@ -37,7 +37,7 @@ for target in targets:
         print("Candidate:", candidate)
         audioloader.configure(filename=candidate)
         candidate_audio = audioloader()
-        ov, fwise= roman_dissonance(target_audio, candidate_audio)
+        ov, fwise= gebhardt_dissonance(target_audio, candidate_audio)
         dissonances.append((ov, fwise))
 
     ov_diss = np.array([song[0] for song in dissonances])
