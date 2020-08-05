@@ -101,4 +101,24 @@ In this case this algorithm calculates the roughness across different pitch shif
 ```text
 CITE HERE GEBHARDT ET AL
 ```
-So the `ov` variable will be a list of the form 97x1, beingh this the overall dissonance from pitch shift -48 to pitch shift 48.
+So the `ov` variable will be a list of the form 97x1, which is this the overall dissonance from pitch shift -48 to pitch shift 48.
+
+### Tonal Interval Vectors
+```python
+from harmonic_compatibility.similarity import TIV, TIVCollection
+
+# beatwise_chroma_x is a numpy array containing a list of chroma vectors for the loop x. Shape: `[12 x number of beats]`
+# chroma_x is just a numpy array containing a chroma vector for the whole loop x. Shape: `[12]`
+
+TIV_loop_1 = TIV.from_pcp(chroma_1)
+TIV_loop_2 = TIV.from_pcp(chroma_2)
+
+bTIV_loop_1 = TIVCollection.from_pcp(beatwise_chroma_1)
+bTIV_loop_2 = TIVCollection.from_pcp(beatwise_chroma_2)
+
+small_scale_compatibility = TIV_loop_1.small_scale_compatibility(TIV_loop_2)  # Small scale compatibility for a single TIV. No pitch shift
+pitch_shift, min_small_scale_comp = TIV_loop_1.get_max_compatibility(TIV_loop_2)  # The best mean small scale compatibility (the lowest value), and the pitch shift that gives that result
+
+beatwise_small_scale_compatibility = bTIV_loop_1.small_scale_compatibility(bTIV_loop_2)  # The mean small scale compatibility for a collection of TIV. No pitch shift
+pitch_shift, beat_min_small_scale_comp = bTIV_loop_1.get_max_compatibility(bTIV_loop_2)  # The best mean small scale compatibility (the lowest value), and the pitch shift that gives that result. The pitch shift is a single value across the set of TIVs.
+```
