@@ -111,7 +111,7 @@ def virtual_pitch_class_spectrum(pc, X, normalized=True):
     return num / np.sum(den)
 
 
-def harmonicity(X):
+def ph_harmon(X):
     template = milne_pc_spectrum([0])
     all_pob = np.correlate(X, np.concatenate([template, template]), mode='valid')
     all_pob = all_pob / (np.linalg.norm(X) * np.linalg.norm(template))

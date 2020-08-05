@@ -1,9 +1,9 @@
-import master_thesis as mt
+from harmonic_compatibility.consonance.harmonicity import transform_to_pc, ph_harmon, milne_pc_spectrum
+from harmonic_compatibility import utils
 from glob import glob
 import essentia.standard as std
 import numpy as np
 from librosa.effects import pitch_shift
-from master_thesis.utils import *
 import csv
 import sys
 
@@ -51,17 +51,17 @@ for target in targets:
                 else:
                     mod_candidate = pitch_shift(audio_candidate, 44100, pshift).astype(np.float32)
             mix_audio = mix(audio_target, mod_candidate, 44100)
-            spf, mpf = mt.get_sines_per_frame(mix_audio, 44100)
-            hpf, hpm = mt.get_hpeaks_per_frame(mix_audio, 44100)
-            pcs = mt.transform_to_pc(spf)
+            spf, mpf = utils.get_sines_per_frame(mix_audio, 44100)
+            hpf, hpm = utils.get_hpeaks_per_frame(mix_audio, 44100)
+            pcs = transform_to_pc(spf)
             n_frames = pcs.shape[0]
             har_frame = np.zeros(n_frames)
             inh_frame = np.zeros(n_frames)
             dis_frame = np.zeros(n_frames)
             for i in range(n_frames):
                 # Peter's harmonicity part
-                mspec = mt.milne_pc_spectrum(pcs[i])
-                har_frame[i] = mt.harmonicity(mspec)
+                mspec = milne_pc_spectrum(pcs[i])
+                har_frame[i] = ph_harmon(mspec)
 
                 # Inharmonicity Measure (essentia)
                 inh_frame[i] = std.Inharmonicity()(hpf[i], hpm[i])

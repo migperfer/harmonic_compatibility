@@ -72,13 +72,14 @@ So aditionally for those algorithms you will need:
 ### Harrison & Pearce harmonicity
 ```python
 ...
-from harmonic_compatibility.consonance.ph_harmonicity import transform_to_pc, ph_harmon, milne_pc_spectrum
+from harmonic_compatibility.consonance.harmonicity import transform_to_pc, ph_harmon, milne_pc_spectrum
+from harmonic_compatibility import utils
 
 # Extract the audio of some file
 audio_vector = librosa/essentia/madmom...
-sines_per_frame, magnitudes_per_frame = get_sines_per_frame(audio_vector)  # Get the sines per frame, using the sinusoidal model.
+sines_per_frame, magnitudes_per_frame = utils.get_sines_per_frame(audio_vector)  # Get the sines per frame, using the sinusoidal model.
 
-pcs_framewise = transform_to_pc(sines_per_frame) # Transform the sines in Hz to pitch classes
+pcs_framewise = utils.transform_to_pc(sines_per_frame) # Transform the sines in Hz to pitch classes
 milne_spec = milne_pc_spectrum(pcs_framewise[0]) # Get the Milne's spectrum of the first frame _(see paper for details)_
 harmonicity = ph_harmon(milne_spec)
 ...
