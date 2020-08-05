@@ -107,8 +107,8 @@ So the `ov` variable will be a list of the form 97x1, which is this the overall 
 ```python
 from harmonic_compatibility.similarity import TIV, TIVCollection
 
-# beatwise_chroma_x is a numpy array containing a list of chroma vectors for the loop x. Shape: `[12 x number of beats]`
-# chroma_x is just a numpy array containing a chroma vector for the whole loop x. Shape: `[12]`
+# beatwise_chroma_x is a numpy array containing a list of chroma vectors for the loop x. Shape: [12 x number of beats]
+# chroma_x is just a numpy array containing a chroma vector for the whole loop x. Shape: [12]
 
 TIV_loop_1 = TIV.from_pcp(chroma_1)
 TIV_loop_2 = TIV.from_pcp(chroma_2)
@@ -122,3 +122,12 @@ pitch_shift, min_small_scale_comp = TIV_loop_1.get_max_compatibility(TIV_loop_2)
 beatwise_small_scale_compatibility = bTIV_loop_1.small_scale_compatibility(bTIV_loop_2)  # The mean small scale compatibility for a collection of TIV. No pitch shift
 pitch_shift, beat_min_small_scale_comp = bTIV_loop_1.get_max_compatibility(bTIV_loop_2)  # The best mean small scale compatibility (the lowest value), and the pitch shift that gives that result. The pitch shift is a single value across the set of TIVs.
 ```
+
+### Automashupper
+```python
+from harmonic_compatibility.similarity import get_mashability
+bpm=140  # Our dataset consists on loops of 140bpm
+res_mash, p_shift, b_offset, h_contr, r_contr = get_mashability("path/to/audio1", "path/to/audio2", bpm, bpm, sr=44100)  # Get the mashability
+
+```
+`res_mash` maximum mashability score possible for this mix. `p_shift` is the pitch shift that maximizes the compatibility between the two loops. `b_offset` its the beat offset that maximizes the mahsability score. `h_contr` and `r_contr` are the separated values for _harmonic matching_ and _spectral balance_.

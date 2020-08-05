@@ -1,4 +1,4 @@
-import master_thesis as mt
+from harmonic_compatibility.similarity import get_mashability
 from glob import glob
 import essentia.standard as std
 import numpy as np
