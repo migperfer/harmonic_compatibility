@@ -1,11 +1,12 @@
-from joblib import Parallel, delayed
 import numpy as np
+from joblib import Parallel, delayed
 import cupy as cp
+from scipy.signal import argrelextrema
 from itertools import combinations
 import essentia.standard as estd
 
 
-def mix_dissonance(audio_vector1, audio_vector2):
+def hutchinson_dissonance(audio_vector1, audio_vector2):
     """
     Dissonance created by the mix of two audios. Sampling rate should be 44100
     :param audio_vector1: Numpy array of audio 1
@@ -27,21 +28,28 @@ def final(f1, f2shift, m1, m2):
     Output: framewise dissonace, overall dissonance
     """
     shftD = shiftdiss(f1, f2shift, m1, m2)  # np.array of framewise roughness-matrices for each of the 97F pitch-shifts
-    shiftedOverallDiss = np.sum(shftD, axis=1)  # computes overall dissonance over all the frames for each pitchshift
+    shiftedOverallDiss = np.mean(shftD, axis=1)  # computes overall dissonance over all the frames for each pitchshift
 
     return shftD, shiftedOverallDiss
 
 
-def shiftdiss(f1, f2shift, m1, m2):
+def shiftdiss(f1, f2shift, m1, m2, parallel=True):
     """
     function to call roughness/dissonance function for every single pitch-shift
     """
     n_shifts = f2shift.shape[0]
     n_frames = np.min((len(f1), f2shift.shape[1]))
-    framewise_dissonance = Parallel(n_jobs=4, verbose=2)(delayed(roughdiss)
-                                                         (f1, f2shift[i], m1, m2) for i in range(n_shifts))
-
-    return np.array(framewise_dissonance)
+    if parallel:
+        framewise_dissonance = Parallel(n_jobs=4, verbose=2)(delayed(roughdiss)
+                                                            (f1, f2shift[i], m1, m2) for i in range(n_shifts))
+        framewise_dissonance = np.array(framewise_dissonance)
+    else:
+        framewise_dissonance = np.zeros((n_shifts, n_frames), dtype=np.float64)
+        for shift in range(n_shifts):
+            framewise_dissonance[shift, :] = roughdiss(f1, f2shift[shift], m1, m2)
+        if shift % 10 == 0:
+            print("Done %s shifts" % shift)
+    return framewise_dissonance
 
 
 def dissonance(f1, f2):
@@ -95,7 +103,7 @@ def roughdiss(f1, f2, m1, m2):
             
             diffreq = fabs(x-y);
             midfreq = (x+y)/2;
-            cbw = 6.23 * ((midfreq / 1000.) * (midfreq / 1000.)) + 93.39 * (midfreq / 1000.) + 28.52;
+            cbw = 1.72 * powf(midfreq, 0.65);
             critint = diffreq/cbw;
             if (critint < 1.2){
                 g = exp(1.) * (critint/0.25) * exp(-critint/0.25) * exp(1.) * (critint/0.25) * exp(-critint/0.25);
@@ -113,12 +121,11 @@ def roughdiss(f1, f2, m1, m2):
                              cp.array(y_gpu, np.float32))
 
         num = cp.sum(freqr*m1_gpu*m2_gpu)
-        denom = cp.sum(m2_gpu * m2_gpu)*2
+        denom = cp.sum(m1_gpu * m1_gpu)*2
         if denom != 0:
             framewise_dissonance[i] = num/denom
         else:
             framewise_dissonance[i] = 0
-
     return cp.asnumpy(framewise_dissonance)
 
 

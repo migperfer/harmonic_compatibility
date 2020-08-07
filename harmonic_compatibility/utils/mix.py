@@ -8,10 +8,9 @@ from pyrubberband.pyrb import pitch_shift, frequency_multiply
 eps = np.finfo(float).eps
 
 __all__ = ['mix', 'create_mashabilities_examples', 'create_tiv_examples',
-           'create_roman_dissonance_examples', 'get_sines_per_frame',
-           'transform_to_pc', 'create_p_harmonicity_examples',
-           'create_inharmonicity_examples', 'create_dissonances_examples',
-           'create_hutchinson_examples']
+            'create_gebhardt_dissonance_examples', 'create_p_harmonicity_examples', 
+            'create_inharmonicity_examples', 'create_dissonances_examples', 
+            'create_hutchinson_examples']
 
 def mix(audio1, audio2, sr):
     """
@@ -125,7 +124,7 @@ def create_tiv_examples(audio_target_file, file_compatibilities, audios_folder, 
     return listoreturn
 
 
-def create_roman_dissonance_examples(audio_target_file, file_compatibilities, audios_folder, n_examples=3, sr=44100):
+def create_gebhardt_dissonance_examples(audio_target_file, file_compatibilities, audios_folder, n_examples=3, sr=44100):
     """
     Given an audio and a file with its compatibilities create the mixes
     :param audio_target_file: The audio itself
@@ -259,76 +258,3 @@ def create_dissonances_examples(audio_target_file, file_compatibilities, audios_
         listoreturn.append(audio)
 
     return listoreturn
-
-
-def get_sines_per_frame(audio, sr=44100, onlyfrecuencies=False, nsines=20):
-    """
-    Perform framewise sinusoidal model in an audio
-    :param audio: Audio either mono or stereo. Will be downsampled to mono
-    :param sr: Samplerate used for the audio
-    :return: Nx2x100. N is the number of resulting frames. 2x100 are the frequencies and magnitudes respectively.
-    """
-    if audio.ndim > 1:
-        audio = std.MonoMixer()(audio, audio.shape[1])
-
-    len_arrays = 0
-    for i, _ in enumerate(std.FrameGenerator(audio, frameSize=4096, hopSize=2048)):
-        len_arrays = i
-
-    fft_algo = std.FFT()
-    sine_anal = std.SineModelAnal(maxnSines=nsines, orderBy='frequency', minFrequency=1)
-    sines = np.zeros([len_arrays + 1, 2, nsines], dtype=np.float32) + eps
-    for i, frame in enumerate(std.FrameGenerator(audio, frameSize=4096, hopSize=2048)):
-        fft = fft_algo(frame)
-        freqs, mags, _ = sine_anal(fft)
-        sorting_indexes = np.argsort(freqs)
-        freqs = freqs[sorting_indexes]
-        mags = mags[sorting_indexes]
-        sines[i, :] = [freqs, mags]
-    if onlyfrecuencies:
-        return sines[:, 0, :]
-    else:
-        return sines[:, 0, :], sines[:, 1, :]
-
-
-def get_hpeaks_per_frame(audio, sr=44100, onlyfrecuencies=False, nsines=20):
-    """
-    Get Harmonic peaks in an audio
-    :param audio: Audio either mono or stereo. Will be downsampled to mono
-    :param sr: Samplerate used for the audio
-    :return: Nx2x100. N is the number of resulting frames. 2x100 are the frequencies and magnitudes respectively.
-    """
-    if audio.ndim > 1:
-        audio = std.MonoMixer()(audio, audio.shape[1])
-
-    fft_algo = std.FFT()
-    pyin = std.PitchYin()
-    hpeaks = std.HarmonicPeaks()
-    sine_anal = std.SineModelAnal(maxnSines=nsines, orderBy='frequency', minFrequency=1)
-    sines = []
-    for i, frame in enumerate(std.FrameGenerator(audio, frameSize=4096, hopSize=2048)):
-        pitch, _ = pyin(frame)
-        fft = fft_algo(frame)
-        freqs, mags, _ = sine_anal(fft)
-        sorting_indexes = np.argsort(freqs)
-        freqs = freqs[sorting_indexes]
-        mags = mags[sorting_indexes]
-        non_zero_freqs = np.where(freqs != 0)
-        freqs = freqs[non_zero_freqs]
-        mags = mags[non_zero_freqs]
-        freqs, mags = hpeaks(freqs, mags, pitch)
-        sines.append([freqs, mags])
-    sines = np.array(sines)
-    if onlyfrecuencies:
-        return sines[:, 0, :]
-    else:
-        return sines[:, 0, :], sines[:, 1, :]
-
-
-def transform_to_pc(freqs):
-    """
-    Converts between frequency to pitch class (continuous)
-    :param freqs: The frequencies to convert
-    :return: Pitch class for each frequency
-    """
-    return (9 + 12*np.log2(eps + (freqs/440))) % 12
