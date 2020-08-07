@@ -99,7 +99,7 @@ ov_h, fwise_h = hutchinson_dissonance(audio_vector1, audio_vector2)  # The overa
 
 In this case this algorithm calculates the roughness across different pitch shifts as in the original paper:
 ```text
-CITE HERE GEBHARDT ET AL
+Gebhardt, R., Davies, M., & Seeber, B. (2015). Harmonic mixing based on roughness and pitch commonality.
 ```
 So the `ov` variable will be a list of the form 97x1, which is this the overall dissonance from pitch shift -48 to pitch shift 48.
 
