@@ -31,11 +31,11 @@ harmonic_compatibility
 |
 |
 ------- utils
-``` 
+```
 The *_nocuda* are versions of the algorithms that *doesn't requiere CUDA* to work. Notice that this versions were
 not used in our experiments and still under development. We include those algorithms 
 
- 
+
 ## Utils
 
 The utils subpackage contains functions that helps to recreate the methodology used in our work.
@@ -131,3 +131,17 @@ res_mash, p_shift, b_offset, h_contr, r_contr = get_mashability("path/to/audio1"
 
 ```
 `res_mash` maximum mashability score possible for this mix. `p_shift` is the pitch shift that maximizes the compatibility between the two loops. `b_offset` its the beat offset that maximizes the mahsability score. `h_contr` and `r_contr` are the separated values for _harmonic matching_ and _spectral balance_.
+
+## Survey results
+
+The survey results are provided in the **survey_results.csv** file. The field-names are:
+
+* algo1: The first algorithm presented in the pairwise comparison
+* algo2: The second algorithm presented in the pairwise comparison
+* target: The target loop for pairwise comparison
+* timestamp: The timestamp when the comparison was stored
+* global_number: The number that identifies the unique combination of algo1, algo2 and target.
+* chosen_algo: The chosen algorithm by the respondent:
+  * 0: No preference
+  * 1: Preference for the mix chosen by the first algorithm
+  * 2: Preference for the mix chosen by the second algorithm
