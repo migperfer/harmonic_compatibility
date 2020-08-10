@@ -45,8 +45,9 @@ a _.csv_ with the compatibilities for one loops, create the top _n_ best mixes.
 
 ## Scripts folder
 
-Here are located the scripts that I used our my work to calculate harmonic compatibility for all the possible algorithms.
-They work by setting up different _target loops_, and a directory where all the _candidate loops_ are located.
+Here are located the scripts that I used our my work to calculate harmonic compatibility for all the possible algorithms. They work by setting up different _target loops_, and a directory where all the _candidate loops_ are located. 
+
+There is also the _R_ script used to analyse the results of the survey.
 
 ## Requirements
 This repository needs:
