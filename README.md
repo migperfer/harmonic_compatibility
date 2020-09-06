@@ -98,7 +98,7 @@ ov_g, fwise_g = gebhardt_dissonance(audio_vector1, audio_vector2)  # The overall
 ov_h, fwise_h = hutchinson_dissonance(audio_vector1, audio_vector2)  # The overall dissonance and the framewise dissonance.
 ```
 
-In this case this algorithm calculates the roughness across different pitch shifts as in the original paper:
+In the `gebhardt_dissonance` case this algorithm calculates the roughness across different pitch shifts as in the original paper:
 ```text
 Gebhardt, R., Davies, M., & Seeber, B. (2015). Harmonic mixing based on roughness and pitch commonality.
 ```
