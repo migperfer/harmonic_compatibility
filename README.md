@@ -54,7 +54,6 @@ This repository needs:
 * essentia~=2.1b5
 * numpy~=1.16.2
 * pandas~=0.25.1
-* pyrubberband~=0.3.0
 * matplotlib~=3.0.2
 * setuptools~=41.6.0
 * joblib~=0.14.1
@@ -62,6 +61,8 @@ This repository needs:
 * librosa~=0.7.2
 * madmom~=0.16.1
 * pydub~=0.23.0
+
+PyRubberband is also needed, but for now the `frequency_multiply` function can only be found in this [fork](https://github.com/migperfer/pyrubberband/tree/more_base_functions).
 
 And also for _Hutchinson & Knopoff_ and _Gebhardt et al._, CUDA is used to speed up the calculation.
 So aditionally for those algorithms you will need:
